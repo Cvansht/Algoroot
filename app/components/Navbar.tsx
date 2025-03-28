@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
 import {
   Menu,
@@ -9,10 +11,12 @@ import {
   Trash2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/app/context/Auth";
+import { useAuth } from "../context/Auth";
+import { useSidebar } from "../context/SidebarContext";
 
 const Navbar = () => {
   const { user, logout, deleteAccount } = useAuth();
+  const { toggleSidebar } = useSidebar();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -38,7 +42,10 @@ const Navbar = () => {
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-4 flex items-center justify-between fixed w-full top-0 z-50 shadow-lg h-24">
       <div className="flex items-center space-x-4">
-        <button className="lg:hidden hover:bg-blue-500 p-2 rounded-lg transition-colors">
+        <button
+          onClick={toggleSidebar}
+          className="lg:hidden hover:bg-blue-500 p-2 rounded-lg transition-colors"
+        >
           <Menu size={24} />
         </button>
         <motion.div
@@ -100,7 +107,8 @@ const Navbar = () => {
     transition-all duration-200 backdrop-blur-sm border border-white/20"
           >
             <User size={18} />
-            <span className="font-medium hidden md:inline">Your Account</span>
+            {/* Show text only on medium and larger screens */}
+            <span className="hidden md:inline font-medium">Your Account</span>
             <ChevronDown
               size={18}
               className={`transition-transform duration-200 ${
